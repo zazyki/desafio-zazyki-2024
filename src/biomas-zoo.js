@@ -1,27 +1,17 @@
 class BiomasZoo {
-    constructor(tipo, tamanho, animais){
+    constructor(nome, tipo, tamanho, animais){
+        this.nome = nome
         this.tipo = tipo
         this.tamanho = tamanho
         this.animais = animais
         this.espaco = tamanho
-    }
-
-    getTipo(){
-        return this.tipo
-    }
-
-    getAnimais(){
-        return this.animais
+        this.mespecies = 0
     }
 
     setEspaco(animais){
         for (let i = 0; i < this.animais.length; i++) {
             this.espaco -= animais.get(this.animais[i])[1]
         }
-    }
-
-    getEspaco(){
-        return this.espaco
     }
 
     temCarnvr(animais){
