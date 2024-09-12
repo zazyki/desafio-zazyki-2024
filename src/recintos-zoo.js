@@ -99,6 +99,4 @@ class RecintosZoo {
 
 export { RecintosZoo as RecintosZoo };
 
-var rec = new RecintosZoo().analisaRecintos("leopardo", 1)
-console.log(rec.erro)
-console.log(rec.recintosViaveis)
+
