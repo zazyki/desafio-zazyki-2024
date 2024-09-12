@@ -1,4 +1,5 @@
 class BiomasZoo {
+
     constructor(nome, tipo, tamanho, animais){
         this.nome = nome
         this.tipo = tipo
@@ -7,24 +8,20 @@ class BiomasZoo {
         this.espaco = tamanho
         this.mespecies = 0
     }
-
+    //determina o espaço disponível de acordo com os animais presentes no recinto
     setEspaco(animais){
-        for (let i = 0; i < this.animais.length; i++) {
-            this.espaco -= animais.get(this.animais[i])[1]
-        }
+        this.animais.forEach(animal => {
+            this.espaco -= animais.get(animal)["tamanho"]
+        });
     }
-
+    //retorna 1 caso haja algum animal carnívoro no recinto e 0 caso não haja
     temCarnvr(animais){
         let t = 1
-
-        for (let i = 0; i < this.animais.length; i++){
-            
-            t = t*animais.get(this.animais[i])[2]
-        }
+        this.animais.forEach(animal => {
+            t = t*animais.get(animal)["carnvr"]
+        })
         return t
-    }
-        
-    
+    }      
 }
 
 export {BiomasZoo as BiomasZoo};

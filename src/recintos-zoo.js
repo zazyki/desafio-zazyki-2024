@@ -1,5 +1,5 @@
 
-import { animais as ANIMAIS, recintos as RECINTOS, lista_animais as LISTA_ANIMAIS } from "./info-zoo.js";
+import { ANIMAIS, RECINTOS, LISTA_ANIMAIS } from "./info-zoo.js";
 
 class RecintosZoo {
 
@@ -7,15 +7,16 @@ class RecintosZoo {
         this.erro = erro
         this.recintosViaveis = recintosViaveis
     }
-    
-    filtraBioma(biomas, i){
-        //if(biomas.includes(recintos[i].getTipo())){             
+
+    //filtra os recintos de acordo com os biomas aceitos pelo animal recebido
+    filtraBioma(biomas, i){           
         if(biomas.includes(RECINTOS[i].tipo)){  
             return 1
         }
         return 0        
     }
 
+    //filtra os recintos de acordo com o tamanho necessário para o animal e quantidade informados
     filtraTamanho(animal, tamanho_req, i){
         if(RECINTOS[i].animais.length > 0 && !RECINTOS[i].animais.includes(animal)){
             RECINTOS[i].mespecies = 1
@@ -26,13 +27,21 @@ class RecintosZoo {
         return 0
     }
 
+    //testa se um recinto e seus animais se adequam à dieta do animal informado
     filtraCarnvr(animal, i){
-        if(RECINTOS[i].temCarnvr(ANIMAIS)==ANIMAIS.get(animal)[2] || RECINTOS[i].animais.length==0){
+        if(RECINTOS[i].temCarnvr(ANIMAIS)==ANIMAIS.get(animal)["carnvr"] || RECINTOS[i].animais.length==0){
+            const a = [...RECINTOS[i].animais]
+            a.push(animal)
+            const allEqual = arr => arr.every( v => v === arr[0] )
+            if(ANIMAIS.get(animal)["carnvr"] && !allEqual(a)){
+                return 0
+            }
             return 1
         }
         return 0
     }
 
+    //testa se um recinto se adequa às particularidades dos macacos e hipopótamos
     filtraPart(animal, quant, i){
 
         if(animal=="MACACO" && RECINTOS[i].animais.length==0 && quant==1){
@@ -51,9 +60,8 @@ class RecintosZoo {
 
     analisaRecintos(animal, quantidade) {
         animal=animal.toUpperCase()
-        var erro = false
-        var recintos_top = []
-
+        
+        //retorna os erros de entrada
         if(!LISTA_ANIMAIS.includes(animal)){
             return new RecintosZoo("Animal inválido", false)
         }
@@ -62,12 +70,14 @@ class RecintosZoo {
         }else if(quantidade<1){
             return new RecintosZoo("Quantidade inválida", false)
         }  
- 
-        var tamanho_req = quantidade*ANIMAIS.get(animal)[1]
-        const recintos_req = ANIMAIS.get(animal)[0]
+        
+        let erro = false
+        let recintos_top = []
+        const tamanho_req = quantidade*ANIMAIS.get(animal)["tamanho"]
+        const recintos_req = ANIMAIS.get(animal)["biomas"]
 
-        for (let i = 0; i < RECINTOS.length; i++) {//foreach
-            this.erro = "Não há recinto viável"
+        //caso passe em todos os testes simultaneamente, o recinto de índice i e suas informações são adicionados à array de respostas
+        for (let i = 0; i < RECINTOS.length; i++) {
 
             if(this.filtraBioma(recintos_req, i)
             && this.filtraTamanho(animal, tamanho_req, i)
@@ -89,6 +99,6 @@ class RecintosZoo {
 
 export { RecintosZoo as RecintosZoo };
 
-var rec = new RecintosZoo().analisaRecintos("macaco", 1)
+var rec = new RecintosZoo().analisaRecintos("leopardo", 1)
 console.log(rec.erro)
 console.log(rec.recintosViaveis)
